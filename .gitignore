@@ -8,6 +8,7 @@ data/raw
 __pycache__/
 *.py[cod]
 *$py.class
+src/test
 
 # C extensions
 *.so
