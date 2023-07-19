@@ -1,3 +1,5 @@
+data/raw
+
 # Created by https://www.toptal.com/developers/gitignore/api/python,visualstudiocode
 # Edit at https://www.toptal.com/developers/gitignore?templates=python,visualstudiocode
 
@@ -6,6 +8,7 @@
 __pycache__/
 *.py[cod]
 *$py.class
+src/test
 
 data/raw
 data/pickle
