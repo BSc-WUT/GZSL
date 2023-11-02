@@ -1,4 +1,7 @@
 data/raw
+packetbaseml/data/interim/*.csv
+packetbaseml/data/raw/*.csv
+packetbaseml/data/processed/*.pkl
 
 # Created by https://www.toptal.com/developers/gitignore/api/python,visualstudiocode
 # Edit at https://www.toptal.com/developers/gitignore?templates=python,visualstudiocode

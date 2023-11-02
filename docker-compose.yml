@@ -1,0 +1,17 @@
+version: '3.8'
+services:
+  api:
+    build: .
+    hostname: ml-api
+    ports:
+      8000:8000
+    volumes:
+      - ./src:/app/src
+    env_file:
+      - .env
+    networks:
+      - es-net
+networks:
+  es-net:
+    name: es-net
+    external: true
