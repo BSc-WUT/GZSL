@@ -3,8 +3,8 @@ import os
 import torch.utils.data as tdata
 
 from src.vars import INTERIM_DATA_PATH, MERGED_DATA_FILENAME, COLUMNS_TO_DROP
-from src.data.labels import labels
-from src.data.parse_dataset import load_csv_to_dataframe
+from src.data.labels import labels, test_labels, train_labels
+from src.data.parse_dataset import load_csv_to_dataframe, dataframe_to_dataloader
 
 
 class DatasetIDS2018(tdata.Dataset):
@@ -15,6 +15,7 @@ class DatasetIDS2018(tdata.Dataset):
     ):
         self.data = load_csv_to_dataframe(csv_file_name)
         self.transform = transform
+        self.is_fixed = False
 
     def __len__(self) -> int:
         return len(self.data)
@@ -50,3 +51,20 @@ class DatasetIDS2018(tdata.Dataset):
         self.drop_columns(COLUMNS_TO_DROP)
         self.map_labels_to_idx()
         self.fix_data_type_to_numeric()
+        self.is_fixed = True
+
+    def load_dataloader(
+        self, batch_size: int, data_loader_type: str = "test" | "train"
+    ) -> tdata.DataLoader:
+        if not self.is_fixed:
+            self.fix_dataset()
+        labels_idx: dict = {label: i for i, label in enumerate(labels)}
+        l_labels: list = (
+            train_labels[:-1] if data_loader_type == "train" else test_labels
+        )  # Not including `Label` class
+        l_labels_idx: list = [
+            idx for label, idx in labels_idx.items() if label in l_labels
+        ]
+        dataframe: pd.DataFrame = self.filter_data_by_labels(l_labels_idx)
+        dataloader: tdata.DataLoader = dataframe_to_dataloader(dataframe, batch_size)
+        return dataloader

@@ -43,17 +43,13 @@ def save_pickle_dataset(dataset: pd.DataFrame, pickle_path: str) -> None:
     dataset.to_pickle(pickle_path)
 
 
-def dataframe_to_tensor_dataset(dataframe: pd.DataFrame) -> tdata.TensorDataset:
+def dataframe_to_dataloader(
+    dataframe: pd.DataFrame, batch_size: int
+) -> tdata.TensorDataset:
     dataset: tdata.TensorDataset = tdata.TensorDataset(
         torch.from_numpy(dataframe.values).float(),
         torch.from_numpy(dataframe.values[:, -1].astype(float)).float(),
     )
-    return dataset
-
-
-def tensor_dataset_to_dataloader(
-    dataset: tdata.TensorDataset, batch_size: int
-) -> tdata.DataLoader:
     data_loader: tdata.DataLoader = tdata.DataLoader(
         dataset, batch_size=batch_size, shuffle=True
     )
