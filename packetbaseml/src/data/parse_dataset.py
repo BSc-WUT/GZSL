@@ -1,5 +1,7 @@
 import pandas as pd
 import os
+import torch.utils.data as tdata
+import torch
 
 from src.vars import DATA_PATH, MERGED_DATA_FILENAME, INTERIM_DATA_PATH
 
@@ -23,10 +25,36 @@ def load_csv_to_dataframe(file_path: str) -> pd.DataFrame:
         [
             df
             for df in pd.read_csv(
-                os.path.join(INTERIM_DATA_PATH, file_path),
+                file_path,
                 chunksize=10**3,
                 low_memory=False,
             )
         ]
     )
     return dataframe
+
+
+def load_pickle_dataset(pickle_path: str) -> pd.DataFrame:
+    dataframe: pd.DataFrame = pd.read_pickle(pickle_path)
+    return dataframe
+
+
+def save_pickle_dataset(dataset: pd.DataFrame, pickle_path: str) -> None:
+    dataset.to_pickle(pickle_path)
+
+
+def dataframe_to_tensor_dataset(dataframe: pd.DataFrame) -> tdata.TensorDataset:
+    dataset: tdata.TensorDataset = tdata.TensorDataset(
+        torch.from_numpy(dataframe.values).float(),
+        torch.from_numpy(dataframe.values[:, -1].astype(float)).float(),
+    )
+    return dataset
+
+
+def tensor_dataset_to_dataloader(
+    dataset: tdata.TensorDataset, batch_size: int
+) -> tdata.DataLoader:
+    data_loader: tdata.DataLoader = tdata.DataLoader(
+        dataset, batch_size=batch_size, shuffle=True
+    )
+    return data_loader
