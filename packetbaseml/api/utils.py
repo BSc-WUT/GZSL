@@ -39,7 +39,7 @@ def parse_model_summary_to_json(model_summary: ModelStatistics) -> dict:
     for line in next(sections):
         parsed_line: str = re.sub(" +", " ", line).replace(", ", ",").replace(": ", ":")
         parsed_line_params: list = [
-            param if param != "--" else None for param in parsed_line.split(" ")
+            param if param != "--" else 0 for param in parsed_line.split(" ")
         ]
         layer_name, input_shape, output_shape, params, kernel_shape = parsed_line_params
         model_layers.append(
@@ -48,7 +48,7 @@ def parse_model_summary_to_json(model_summary: ModelStatistics) -> dict:
                 "input_shape": input_shape,
                 "output_shape": output_shape,
                 "params": int(params.replace(",", "")) if params else params,
-                "kernel_shape": kernel_shape,
+                "kernel_size": kernel_shape if kernel_shape else "",
             }
         )
     parsed_summary["layers"] = model_layers
@@ -56,10 +56,19 @@ def parse_model_summary_to_json(model_summary: ModelStatistics) -> dict:
     for section in sections:
         for line in section:
             key, value = line.split(": ")
+            parsed_value = 0
             if "," in value:
-                parsed_summary[key] = int(value.replace(",", ""))
+                parsed_value = int(value.replace(",", ""))
             elif "." in value:
-                parsed_summary[key] = float(value)
+                parsed_value = float(value)
+            parsed_summary[
+                key.split(" (")[0]
+                .lower()
+                .replace("size", "size_MB")
+                .replace(" ", "_")
+                .replace("/", "_")
+                .replace("-", "_")
+            ] = parsed_value
 
     return parsed_summary
 

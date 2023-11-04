@@ -17,7 +17,7 @@ class GenericModel(nn.Module):
     def train_model(
         self,
         epochs: int,
-        loss_fn: nn.MSELoss | nn.NLLLoss,
+        loss_fn,
         data_loader: data,
         additional_eps=1e-06,
     ) -> None:

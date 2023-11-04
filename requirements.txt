@@ -4,6 +4,7 @@ uvicorn==0.23.2
 python-dotenv==0.20.0
 python-multipart==0.0.6
 torch==2.0.1
+torchinfo==1.8.0
 numpy==1.24.3
 pandas==2.0.2
 coverage

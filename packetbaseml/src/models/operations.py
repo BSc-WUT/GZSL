@@ -11,5 +11,7 @@ def save_model(model_name: str, model: GenericModel) -> None:
 
 def load_model(model_name: str) -> GenericModel:
     model_path: str = os.path.join(MODELS_PATH, model_name)
+    if not os.path.exists(model_path):
+        raise FileNotFoundError()
     model: GenericModel = torch.load(model_path)
     return model
