@@ -34,7 +34,8 @@ def get_models_list() -> List[Model]:
 def get_model(model_name: str) -> JSONResponse:
     try:
         model: GenericModel = torch.load(os.path.join(MODELS_PATH, f"{model_name}.pt"))
-        model_desc: Model = model_summary_to_json(model, INPUT_SIZE)
+        model_desc: dict = model_summary_to_json(model, INPUT_SIZE)
+        model_desc["name"] = model_name.split(".")[0]
         return model_desc
     except:
         return {"error": f"Model: {model_name} was not found"}
