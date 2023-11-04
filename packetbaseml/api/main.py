@@ -6,6 +6,7 @@ import os
 
 from src.vars import MODELS_PATH, INPUT_SIZE
 from src.models.generic import GenericModel
+from src.models.operations import load_model
 from .utils import get_env_vars, model_summary_to_json
 from .models import NetworkFlow, Model
 
@@ -20,8 +21,8 @@ ENV_VARS = get_env_vars()
 @app.get("/models")
 def get_models_list() -> List[Model]:
     models_desc: list = []
-    for model_path in os.listdir(MODELS_PATH):
-        model: GenericModel = torch.load(os.path.join(MODELS_PATH, model_path))
+    for model_name in os.listdir(MODELS_PATH):
+        model: GenericModel = load_model(model_name)
         model_desc: Model = model_summary_to_json(model, INPUT_SIZE)
         models_desc.append(model_desc)
     return models_desc
@@ -40,7 +41,7 @@ def get_model(model_name: str) -> JSONResponse:
 @app.post("/models/{model_name}/predict")
 def model_predict(model_name: str, flow: NetworkFlow) -> JSONResponse:
     try:
-        model: GenericModel = torch.load(os.path.join(MODELS_PATH, model_name))
+        model: GenericModel = load_model(model_name)
     except:
         return {"error": f"Model: {model_name} was not found"}
 

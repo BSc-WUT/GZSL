@@ -10,4 +10,4 @@ In this repository dataset is ignored. To use the model properly you have to:
 
 ### Working with notebooks
 1. `cd packetbaseml`
-2. `pip install -e .`
+2. `pip install -e .` or `pip install --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org -e .` if encounter SSL errors

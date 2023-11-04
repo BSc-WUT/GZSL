@@ -54,7 +54,7 @@ class DatasetIDS2018(tdata.Dataset):
         self.is_fixed = True
 
     def load_dataloader(
-        self, batch_size: int, data_loader_type: str = "test" | "train"
+        self, batch_size: int, data_loader_type: str
     ) -> tdata.DataLoader:
         if not self.is_fixed:
             self.fix_dataset()
