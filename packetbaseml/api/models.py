@@ -1,4 +1,29 @@
 from pydantic import BaseModel
+from typing import List
+
+class ModelLayer(BaseModel):
+    'layer_name': str
+    'input_shape': str
+    'output_shape': str
+    'params': int | None
+    'kernel_size': str | None
+
+class Model(BaseModel):
+    layers: List[ModelLayer]
+    'Total params': int
+    'Trainable params': int
+    'Non-trainable params': int
+    'Total mult-adds (Units.MEGABYTES)': float
+    'Input size (MB)': float
+    'Forward/backward pass size (MB)': float
+    'Params size (MB)': float
+    'Estimated Total Size (MB)': float
+
+class ModelShort(BaseModel):
+    layers: List[str]
+    'input_shape': str
+    'output_shape': str
+    'Total params': int
 
 
 class NetworkFlow(BaseModel):
