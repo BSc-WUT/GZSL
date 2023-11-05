@@ -23,11 +23,11 @@ endif
 ## Install Python Dependencies
 requirements: test_environment
 	$(PYTHON_INTERPRETER) -m pip install -U pip setuptools wheel
-	$(PYTHON_INTERPRETER) -m pip install -r requirements.txt
+	$(PYTHON_INTERPRETER) -m pip install -r ./../requirements.txt
 
 ## Make Dataset
 data: requirements
-	$(PYTHON_INTERPRETER) src/data/make_dataset.py data/raw data/processed
+	$(PYTHON_INTERPRETER) packetbaseml/src/data/make_dataset.py
 
 ## Delete all compiled Python files
 clean:
@@ -37,7 +37,7 @@ clean:
 ## Lint using flake8
 lint:
 	flake8 src
-
+#aws s3 sync --no-sign-request --no-verify-ssl --region eu-central-1 "s3://cse-cic-ids2018/Processed Traffic Data for ML Algorithms/" .\INZ\data_inz_raw
 ## Upload Data to S3
 sync_data_to_s3:
 ifeq (default,$(PROFILE))
@@ -48,11 +48,8 @@ endif
 
 ## Download Data from S3
 sync_data_from_s3:
-ifeq (default,$(PROFILE))
-	aws s3 sync s3://$(BUCKET)/data/ data/
-else
-	aws s3 sync s3://$(BUCKET)/data/ data/ --profile $(PROFILE)
-endif
+	aws s3 sync --no-sign-request --no-verify-ssl --region eu-central-1 "s3://cse-cic-ids2018/Processed Traffic Data for ML Algorithms/" packetbaseml/data/raw
+
 
 ## Set up python interpreter environment
 create_environment:

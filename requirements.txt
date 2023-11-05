@@ -8,6 +8,7 @@ torchinfo==1.8.0
 numpy==1.24.3
 pandas==2.0.2
 pydantic==1.10.13
+alive-progress==3.1.4
 coverage
 awscli
 flake8

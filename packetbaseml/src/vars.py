@@ -1,5 +1,5 @@
-DATA_PATH = "../data/raw/"
-INTERIM_DATA_PATH = "../data/interim"
+DATA_PATH = "packetbaseml/data/raw/"
+INTERIM_DATA_PATH = "packetbaseml/data/interim"
 MERGED_DATA_FILENAME = "merged_data.csv"
 MODELS_PATH = "packetbaseml/models/"
 INPUT_SIZE = (1, 78)

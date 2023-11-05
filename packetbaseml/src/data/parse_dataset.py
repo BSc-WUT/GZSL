@@ -2,6 +2,7 @@ import pandas as pd
 import os
 import torch.utils.data as tdata
 import torch
+from alive_progress import alive_bar
 
 from src.vars import DATA_PATH, MERGED_DATA_FILENAME, INTERIM_DATA_PATH
 
@@ -12,8 +13,18 @@ def merge_csv_datasets() -> pd.DataFrame:
         for file_name in os.listdir(DATA_PATH)
         if file_name != MERGED_DATA_FILENAME
     ]
-    merged_dataframe = pd.concat(map(pd.read_csv, data_file_paths), ignore_index=True)
-    return merged_dataframe
+    with alive_bar(len(data_file_paths), title="Merging dataframes...") as bar:
+        for data_file_path in data_file_paths:
+            chunks: list = pd.read_csv(
+                data_file_path, low_memory=False, chunksize=10**3
+            )
+            for chunk in chunks:
+                chunk.to_csv(
+                    os.path.join(INTERIM_DATA_PATH, MERGED_DATA_FILENAME),
+                    mode="a",
+                    index=False,
+                )
+            bar()
 
 
 def save_dataframe_to_csv(dataframe: pd.DataFrame) -> None:
