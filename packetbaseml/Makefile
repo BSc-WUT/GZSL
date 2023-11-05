@@ -48,7 +48,7 @@ endif
 
 ## Download Data from S3
 sync_data_from_s3:
-	aws s3 sync --no-sign-request --no-verify-ssl --region eu-central-1 "s3://cse-cic-ids2018/Processed Traffic Data for ML Algorithms/" ./packetbaseml/data/raw
+	aws s3 sync --no-sign-request --no-verify-ssl --region eu-central-1 "s3://cse-cic-ids2018/Processed Traffic Data for ML Algorithms/" ./data/raw
 
 
 ## Set up python interpreter environment
