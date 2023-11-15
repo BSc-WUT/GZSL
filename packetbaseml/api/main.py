@@ -1,5 +1,6 @@
 from fastapi import FastAPI, UploadFile
 from fastapi.responses import JSONResponse
+from fastapi.middleware.cors import CORSMiddleware
 from typing import List
 import torch
 import os
@@ -13,6 +14,18 @@ from .models import NetworkFlow, Model
 
 app = FastAPI()
 ENV_VARS = get_env_vars()
+
+origins = [
+    "*"
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 """ MODELS """

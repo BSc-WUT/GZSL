@@ -11,6 +11,6 @@ COPY packetbaseml/ /app/packetbaseml
 RUN pip install --no-cache-dir --upgrade --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org -r requirements.txt
 RUN pip install --no-cache-dir --upgrade --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org -e ./packetbaseml
 
-EXPOSE 8000
+EXPOSE 8080
 
-CMD ["uvicorn", "packetbaseml.api.main:app", "--proxy-headers", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "packetbaseml.api.main:app", "--proxy-headers", "--host", "0.0.0.0", "--port", "8080"]
