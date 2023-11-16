@@ -9,6 +9,7 @@ from src.vars import MODELS_PATH, INPUT_SIZE
 from src.models.generic import GenericModel
 from src.models.operations import load_model
 from .utils import get_env_vars, model_summary_to_json
+from .file_metadata import set_is_active_flag, get_is_active_flag
 from .models import NetworkFlow, Model
 
 
@@ -27,6 +28,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+def set_model_flag(model_name: str, flag_value: bool) -> dict:
+    model_path: str = os.path.join(MODELS_PATH, f"{model_name}.pt")
+    set_is_active_flag(model_path, flag_value)
+    return {
+        'result': f'Sucessfully set is_active flag to {flag_value} for model: {model_name}'
+    }
+
 
 """ MODELS """
 
@@ -39,16 +47,30 @@ def get_models_list() -> List[Model]:
             model: GenericModel = load_model(file_name)
             model_desc: dict = model_summary_to_json(model, INPUT_SIZE)
             model_desc["name"] = file_name.split(".")[0]
+            model_desc['is_active'] = get_is_active_flag(file_name)
             models_desc.append(model_desc)
     return models_desc
+
+
+
+@app.get('/models/activate/{model_name}')
+def activate_model(model_name: str) -> JSONResponse:
+    return set_model_flag(model_name, True)
+
+
+@app.get('/models/deactivate/{model_name}')
+def activate_model(model_name: str) -> JSONResponse:
+    return set_model_flag(model_name, False)
 
 
 @app.get("/models/{model_name}")  # ✅
 def get_model(model_name: str) -> JSONResponse:
     try:
-        model: GenericModel = torch.load(os.path.join(MODELS_PATH, f"{model_name}.pt"))
+        model_path: str = os.path.join(MODELS_PATH, f"{model_name}.pt")
+        model: GenericModel = torch.load(model_path)
         model_desc: dict = model_summary_to_json(model, INPUT_SIZE)
         model_desc["name"] = model_name.split(".")[0]
+        model_desc['is_active'] = get_is_active_flag(model_path)
         return model_desc
     except:
         return {"error": f"Model: {model_name} was not found"}

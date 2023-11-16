@@ -11,6 +11,7 @@ class ModelLayer(BaseModel):
 
 
 class Model(BaseModel):
+    is_active: bool
     name: str
     layers: List[ModelLayer]
     total_params: int
