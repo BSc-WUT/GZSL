@@ -47,7 +47,8 @@ def get_models_list() -> List[Model]:
             model: GenericModel = load_model(file_name)
             model_desc: dict = model_summary_to_json(model, INPUT_SIZE)
             model_desc["name"] = file_name.split(".")[0]
-            model_desc['is_active'] = get_is_active_flag(file_name)
+            model_path: str = os.path.join(MODELS_PATH, file_name)
+            model_desc['is_active'] = get_is_active_flag(model_path)
             models_desc.append(model_desc)
     return models_desc
 
