@@ -8,15 +8,16 @@ from alive_progress import alive_bar
 from src.vars import DATA_PATH, MERGED_DATA_FILENAME, INTERIM_DATA_PATH, COLUMNS
 
 
-def merge_csv_datasets() -> pd.DataFrame:
+def merge_csv_datasets(logger) -> pd.DataFrame:
     data_file_paths: list = [
         os.path.join(DATA_PATH, file_name)
         for file_name in os.listdir(DATA_PATH)
         if file_name != MERGED_DATA_FILENAME
     ]
     with alive_bar(len(data_file_paths), title="Merging dataframes...") as bar:
+        logger.info("Started merging csv files")
         for data_file_path in data_file_paths:
-            
+            logger.info(f"Merging {data_file_path}...")
             chunks: list = pd.read_csv(
                 data_file_path, low_memory=False, chunksize=10**3
             )
@@ -31,6 +32,7 @@ def merge_csv_datasets() -> pd.DataFrame:
                     mode="a",
                     index=False,
                 )
+            logger.info(f"Csv file: {data_file_path} merged succesfully.")
             bar()
 
 
@@ -38,17 +40,15 @@ def save_dataframe_to_csv(dataframe: pd.DataFrame) -> None:
     dataframe.to_csv(os.path.join(INTERIM_DATA_PATH, MERGED_DATA_FILENAME), index=False)
 
 
+def generate_dataframe(file_path: str, chunk_size: int = 10 ** 3, encoding: str = 'utf-8') -> pd.DataFrame:
+    for chunk in pd.read_csv(file_path, chunksize=chunk_size, low_memory=False, encoding=encoding):
+        yield chunk
+
+
 def load_csv_to_dataframe(file_path: str) -> pd.DataFrame:
-    dataframe = pd.concat(
-        [
-            df
-            for df in pd.read_csv(
-                file_path,
-                chunksize=10**3,
-                low_memory=False,
-            )
-        ]
-    )
+    dataframe = pd.DataFrame()
+    for chunk in generate_dataframe(file_path):
+        dataframe = pd.concat([dataframe, chunk], ignore_index=True)
     return dataframe
 
 
@@ -72,7 +72,3 @@ def dataframe_to_dataloader(
         dataset, batch_size=batch_size, shuffle=True
     )
     return data_loader
-
-
-if __name__ == '__main__':
-    merge_csv_datasets()
