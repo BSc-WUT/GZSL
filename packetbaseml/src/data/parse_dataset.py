@@ -46,9 +46,21 @@ def generate_dataframe(file_path: str, chunk_size: int = 10 ** 3, encoding: str 
 
 
 def load_csv_to_dataframe(file_path: str) -> pd.DataFrame:
+    '''
     dataframe = pd.DataFrame()
     for chunk in generate_dataframe(file_path):
         dataframe = pd.concat([dataframe, chunk], ignore_index=True)
+    '''
+    dataframe = pd.concat(
+        [
+            df
+            for df in pd.read_csv(
+                file_path,
+                chunksize=10**3,
+                low_memory=False
+            )
+        ]
+    )
     return dataframe
 
 
@@ -72,3 +84,7 @@ def dataframe_to_dataloader(
         dataset, batch_size=batch_size, shuffle=True
     )
     return data_loader
+
+
+if __name__ == '__main__':
+    load_csv_to_dataframe('data/interim/merged.csv')
