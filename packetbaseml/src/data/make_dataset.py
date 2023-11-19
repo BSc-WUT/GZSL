@@ -12,7 +12,7 @@ def main() -> None:
     """
     logger = logging.getLogger(__name__)
     logger.info("making final data set from raw data")
-    merge_csv_datasets()
+    merge_csv_datasets(logger)
 
 
 if __name__ == "__main__":
