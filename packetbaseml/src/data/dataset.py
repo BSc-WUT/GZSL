@@ -41,9 +41,8 @@ class DatasetIDS2018(tdata.Dataset):
                 del self.data[column]
 
     def fix_data_type_to_numeric(self) -> None:
-        numeric_columns = self.data.select_dtypes(include=[np.number]).columns
-        for column in numeric_columns:
-            self.data[column] = pd.to_numeric(self.data[column], errors="coerce", downcast='float')
+        for column in self.data.columns:
+            self.data[column] = pd.to_numeric(self.data[column], errors="coerce")
 
     def map_labels_to_idx(self) -> None:
         labels_idx: dict = {label: i for i, label in enumerate(labels)}
