@@ -5,7 +5,8 @@ from typing import List
 import torch
 import os
 
-from src.vars import MODELS_PATH, INPUT_SIZE
+from src.vars import MODELS_PATH, INPUT_SIZE, COLUMNS, COLUMNS_TO_DROP
+from src.data.labels import labels
 from src.models.generic import GenericModel
 from src.models.operations import load_model
 from .utils import get_env_vars, model_summary_to_json
@@ -81,10 +82,16 @@ def get_model(model_name: str) -> JSONResponse:
 def model_predict(model_name: str, flow: NetworkFlow) -> JSONResponse:
     model_file_name: str = f"{model_name}.pt"
     model: GenericModel = load_model(model_file_name)
-    input: list = [float(value) for value in flow.dict().values()]
-    input_tensor: torch.Tensor = torch.Tensor(input)
-    prediction: dict = model(input_tensor)
-    return {"prediction": prediction}
+    fixed_flow: dict = flow.dict()
+    for column in [key.lower().replace(' ', '_').replace('/','_') for key in COLUMNS if key not in COLUMNS_TO_DROP]:
+        if column not in fixed_flow.keys():
+            fixed_flow[column] = 0
+    input: list = [float(value) for value in fixed_flow.values()]
+    input_tensor: torch.Tensor = torch.Tensor([input])
+    prediction: list = list(model(input_tensor)[0])
+    
+    predicted_class: str = labels[prediction.index(max(prediction)) - 1]
+    return {"prediction": predicted_class}
 
 
 @app.post("/models/upload/{model_name}")  # ✅
