@@ -78,7 +78,7 @@ def get_model(model_name: str) -> JSONResponse:
         return {"error": f"Model: {model_name} was not found"}
 
 
-@app.post("/models/predict/{model_name}")
+@app.post("/models/predict/{model_name}") # ✅
 def model_predict(model_name: str, flow: NetworkFlow) -> JSONResponse:
     model_file_name: str = f"{model_name}.pt"
     model: GenericModel = load_model(model_file_name)
