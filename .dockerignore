@@ -2,3 +2,4 @@ data/raw
 packetbaseml/data/interim/*.csv
 packetbaseml/data/raw/*.csv
 packetbaseml/data/processed/*.pkl
+packetbaseml/notebooks/*
