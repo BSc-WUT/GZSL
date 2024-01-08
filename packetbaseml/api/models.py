@@ -109,3 +109,8 @@ class NetworkFlow(BaseModel):
     subflow_bwd_pkts: float
     subflow_fwd_byts: float
     subflow_bwd_byts: float
+
+
+class FullNetworkFlow(NetworkFlow):
+    src_ip: float
+    dst_ip: float

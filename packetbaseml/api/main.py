@@ -11,7 +11,7 @@ from src.models.generic import GenericModel
 from src.models.operations import load_model
 from .utils import get_env_vars, model_summary_to_json
 from .file_metadata import set_is_active_flag, get_is_active_flag
-from .models import NetworkFlow, Model
+from .models import FullNetworkFlow, NetworkFlow, Model
 
 
 app = FastAPI()
