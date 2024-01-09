@@ -4,7 +4,7 @@ setup(
     name="packetbaseml",
     packages=find_packages(),
     version="0.1.0",
-    description="GZSL Model repo",
+    description="ML-API",
     author="bkosinski",
     license="MIT",
 )
