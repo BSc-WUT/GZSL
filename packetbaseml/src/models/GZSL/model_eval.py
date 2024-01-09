@@ -25,7 +25,7 @@ def evaluate_model(
         for inputs, labels in data_loader:
             inputs = inputs.to(device)
             labels = labels.to(device)
-            labels_vectors = labels_vectors.to(device)
+            #labels_vectors = labels_vectors.to(device)
 
             pred_input = model(inputs)
             pred_label, _ = find_closest_vector(

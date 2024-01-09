@@ -5,7 +5,7 @@ import torch.utils.data as tdata
 
 from src.vars import INTERIM_DATA_PATH, MERGED_DATA_FILENAME, COLUMNS_TO_DROP
 from src.data.labels import labels, test_labels, train_labels
-from src.data.parse_dataset import load_csv_to_dataframe, dataframe_to_dataloader
+from src.data.parse_dataset import load_csv_to_dataframe, dataframe_to_dataloader, save_dataframe_to_csv
 
 
 class DatasetIDS2018(tdata.Dataset):
