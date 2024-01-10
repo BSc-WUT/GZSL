@@ -5,16 +5,20 @@ from src.models.operations import accuracy, sensitivity, precision, f1
 from src.models.GZSL.model import NetNet
 
 
-def find_closest_vector(vector: torch.Tensor, labels_vectors: torch.Tensor) -> float:
+def find_closest_vector(
+    vector: torch.Tensor, labels_vectors: torch.Tensor
+) -> torch.Tensor:
     min_dist = float("inf")
-    min_dist_label = float("inf")
+    min_dist_label = -1
     pdist = torch.nn.PairwiseDistance(p=2)
     for label, label_vector in enumerate(labels_vectors, start=0):
-        dist = pdist(label_vector, vector)
+        dist = pdist(
+            label_vector.unsqueeze(0).to(vector.device), vector.unsqueeze(0)
+        ).item()
         if dist < min_dist:
             min_dist = dist
-            min_dist_label = float(label)
-    return torch.tensor([min_dist_label], dtype=torch.float32)
+            min_dist_label = label
+    return torch.tensor([min_dist_label], dtype=torch.float32, device=vector.device)
 
 
 def evaluate_model(
@@ -28,8 +32,7 @@ def evaluate_model(
         0.0,
     )
 
-    zero_tensor = torch.tensor(0)
-    zero_tensor = zero_tensor.to(device)
+    zero_tensor = torch.tensor(0, device=device)  # Zero tensor on the same device
 
     with torch.no_grad():
         for inputs, labels in data_loader:
@@ -38,7 +41,6 @@ def evaluate_model(
             labels_vectors = labels_vectors.to(device)
 
             pred_inputs = model(inputs)
-            pred_inputs = pred_inputs.to(device)
             pred_labels = torch.cat(
                 [
                     find_closest_vector(
@@ -47,9 +49,7 @@ def evaluate_model(
                     for pred_input in pred_inputs
                 ]
             ).to(device)
-            raise ValueError(
-                f"pred_labels device: {pred_inputs.device}\npred_inputs device: {pred_labels.device}\nzero_tensor device: {zero_tensor.device}\nlabels device: {labels.device}"
-            )
+
             true_predictions += (pred_labels == labels).sum().item()
             false_positive += (
                 (
