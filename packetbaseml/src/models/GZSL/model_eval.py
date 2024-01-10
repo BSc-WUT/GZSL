@@ -43,6 +43,7 @@ def evaluate_model(
                 find_closest_vector(vector=pred_input, labels_vectors=labels_vectors)
                 for pred_input in pred_inputs
             ]
+            pred_labels = torch.tensor(pred_labels)
             pred_labels = pred_labels.to(device)
             raise ValueError(
                 f"pred_labels device: {pred_inputs.device}\npred_inputs device: {pred_labels.device}\nzero_tensor device: {zero_tensor.device}\nlabels device: {labels.device}"
