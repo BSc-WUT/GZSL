@@ -14,7 +14,7 @@ def find_closest_vector(vector: torch.Tensor, labels_vectors: torch.Tensor) -> f
         if dist < min_dist:
             min_dist = dist
             min_dist_label = float(label)
-    return min_dist_label
+    return torch.tensor([min_dist_label], dtype=torch.float32)
 
 
 def evaluate_model(
@@ -39,12 +39,14 @@ def evaluate_model(
 
             pred_inputs = model(inputs)
             pred_inputs = pred_inputs.to(device)
-            pred_labels = [
-                find_closest_vector(vector=pred_input, labels_vectors=labels_vectors)
-                for pred_input in pred_inputs
-            ]
-            pred_labels = torch.tensor(pred_labels)
-            pred_labels = pred_labels.to(device)
+            pred_labels = torch.cat(
+                [
+                    find_closest_vector(
+                        vector=pred_input, labels_vectors=labels_vectors
+                    )
+                    for pred_input in pred_inputs
+                ]
+            ).to(device)
             raise ValueError(
                 f"pred_labels device: {pred_inputs.device}\npred_inputs device: {pred_labels.device}\nzero_tensor device: {zero_tensor.device}\nlabels device: {labels.device}"
             )
