@@ -35,6 +35,7 @@ def evaluate_model(
             labels_vectors = labels_vectors.to(device)
 
             pred_inputs = model(inputs)
+            pred_inputs = pred_inputs.to(device)
             pred_labels = torch.Tensor(
                 [
                     find_closest_vector(
