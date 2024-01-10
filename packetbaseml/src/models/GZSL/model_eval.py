@@ -40,12 +40,16 @@ def evaluate_model(
                 for pred_input in pred_inputs
             ]
             pred_labels = torch.tensor(pred_labels, device=device)
-            true_predictions += int(sum(pred_labels == labels))
-            false_positive += int(
-                sum(pred_labels != labels and (pred_labels == 0 and labels != 0))
+            true_predictions += (pred_labels == labels).sum().item()
+            false_positive += (
+                ((pred_labels != labels) & (pred_labels == 0) & (labels != 0))
+                .sum()
+                .item()
             )
-            false_negative += int(
-                sum(pred_labels != labels and (pred_labels != 0 and labels == 0))
+            false_negative += (
+                ((pred_labels != labels) & (pred_labels != 0) & (labels == 0))
+                .sum()
+                .item()
             )
             predicitons_amount += len(pred_labels)
 
