@@ -1,6 +1,8 @@
 import torch
-from src.models.GZSL.model import NetNet
 import torch.utils.data as data
+
+from src.models.operations import accuracy, sensitivity, precision, f1
+from src.models.GZSL.model import NetNet
 
 
 def find_closest_vector(vector: torch.Tensor, labels_vectors: torch.Tensor) -> float:
@@ -32,26 +34,31 @@ def evaluate_model(
             labels = labels.to(device)
             labels_vectors = labels_vectors.to(device)
 
-            pred_input = model(inputs)
-            pred_label = find_closest_vector(
-                vector=pred_input[0], labels_vectors=labels_vectors
+            pred_inputs = model(inputs)
+            pred_labels = [
+                find_closest_vector(vector=pred_input, labels_vectors=labels_vectors)
+                for pred_input in pred_inputs
+            ]
+            pred_labels = torch.tensor(pred_labels, device=device)
+            true_predictions += (pred_labels == labels).sum().item()
+            false_positive += (
+                ((pred_labels != labels) & (pred_labels == 0) & (labels != 0))
+                .sum()
+                .item()
             )
-            true_predictions += int(pred_label == labels[0])
-            # label = 0 - Benign
-            false_positive += int(
-                pred_label != labels[0] and (pred_label == 0 and labels[0] != 0)
+            false_negative += (
+                ((pred_labels != labels) & (pred_labels != 0) & (labels == 0))
+                .sum()
+                .item()
             )
-            false_negative += int(
-                pred_label != labels[0] and (pred_label != 0 and labels[0] == 0)
-            )
-            predicitons_amount += 1
+            predicitons_amount += len(pred_labels)
 
-        accuracy = 100.0 * true_predictions / predicitons_amount
-        precision = 100.0 * true_predictions / (true_predictions + false_positive)
-        sensitivity = 100.0 * true_predictions / (true_predictions + false_negative)
-        f1 = 2 * precision * sensitivity / (precision + sensitivity)
+        acc = accuracy(true_predictions, predicitons_amount)
+        prec = precision(true_predictions, false_positive)
+        sens = sensitivity(true_predictions, false_negative)
+        f1_value = f1(precision, sensitivity)
 
-    print(f"Accuracy: {accuracy:4.2f}%")
-    print(f"Precision: {precision:4.2f}")
-    print(f"Sensitivity: {sensitivity:4.2f}")
-    print(f"F1: {f1:4.2f}")
+    print(f"Accuracy: {acc:4.2f}%")
+    print(f"Precision: {prec:4.2f}")
+    print(f"Sensitivity: {sens:4.2f}")
+    print(f"F1: {f1_value:4.2f}")
