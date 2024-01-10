@@ -39,7 +39,7 @@ def evaluate_model(
                 find_closest_vector(vector=pred_input, labels_vectors=labels_vectors)
                 for pred_input in pred_inputs
             ]
-            pred_labels = torch.tensor(pred_labels, device=device)
+            pred_labels = pred_labels.to(device)
             print(f"Device of pred_labels: {pred_labels.device}")
             print(f"Device of labels: {labels.device}")
             true_predictions += (pred_labels == labels).sum().item()
