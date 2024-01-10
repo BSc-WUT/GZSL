@@ -32,7 +32,7 @@ class GenericModel(nn.Module):
                 labels = labels.to(self.device)
                 inputs = inputs.to(self.device)
 
-                outputs = self(inputs)
+                outputs = self(inputs).squeeze()
                 loss = loss_fn(outputs, labels)
                 loss.backward()
                 self.optim.step()
