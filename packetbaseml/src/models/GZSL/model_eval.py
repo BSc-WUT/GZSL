@@ -28,7 +28,8 @@ def evaluate_model(
         0.0,
     )
 
-    zero_tensor = torch.tensor(0, device=device)
+    zero_tensor = torch.tensor(0)
+    zero_tensor = zero_tensor.to(device)
 
     with torch.no_grad():
         for inputs, labels in data_loader:
