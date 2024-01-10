@@ -29,9 +29,7 @@ class MLP(GenericModel):
         return x
 
 
-def evaluate_model(
-    device, model: MLP, data_loader: data.DataLoader, labels_vectors: torch.Tensor
-):
+def evaluate_model(device, model: MLP, data_loader: data.DataLoader):
     model.eval()
     true_predictions, predicitons_amount, false_negative, false_positive = (
         0.0,
