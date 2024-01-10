@@ -41,9 +41,9 @@ def evaluate_model(
                         vector=pred_input, labels_vectors=labels_vectors
                     )
                     for pred_input in pred_inputs
-                ]
+                ],
+                device=device,
             )
-            pred_labels = pred_labels.to(device)
             true_predictions += int(sum(pred_labels == labels))
             false_positive += int(
                 sum(pred_labels != labels and (pred_labels == 0 and labels != 0))
