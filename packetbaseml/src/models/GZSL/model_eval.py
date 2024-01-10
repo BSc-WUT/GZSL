@@ -42,6 +42,9 @@ def evaluate_model(
                 for pred_input in pred_inputs
             ]
             pred_labels = pred_labels.to(device)
+            raise ValueError(
+                f"pred_labels device: {pred_inputs.device}\npred_inputs device: {pred_labels.device}\nzero_tensor device: {zero_tensor.device}\nlabels device: {labels.device}"
+            )
             true_predictions += (pred_labels == labels).sum().item()
             false_positive += (
                 (
