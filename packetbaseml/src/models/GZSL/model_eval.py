@@ -43,6 +43,7 @@ def evaluate_model(
                     for pred_input in pred_inputs
                 ]
             )
+            pred_labels = pred_labels.to(device)
             true_predictions += int(sum(pred_labels == labels))
             false_positive += int(
                 sum(pred_labels != labels and (pred_labels == 0 and labels != 0))
