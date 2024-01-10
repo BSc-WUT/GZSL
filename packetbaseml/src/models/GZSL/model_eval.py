@@ -28,6 +28,8 @@ def evaluate_model(
         0.0,
     )
 
+    zero_tensor = torch.tensor(0, device=device)
+
     with torch.no_grad():
         for inputs, labels in data_loader:
             inputs = inputs.to(device)
@@ -40,16 +42,22 @@ def evaluate_model(
                 for pred_input in pred_inputs
             ]
             pred_labels = pred_labels.to(device)
-            print(f"Device of pred_labels: {pred_labels.device}")
-            print(f"Device of labels: {labels.device}")
             true_predictions += (pred_labels == labels).sum().item()
             false_positive += (
-                ((pred_labels != labels) & (pred_labels == 0) & (labels != 0))
+                (
+                    (pred_labels != labels)
+                    & (pred_labels == zero_tensor)
+                    & (labels != zero_tensor)
+                )
                 .sum()
                 .item()
             )
             false_negative += (
-                ((pred_labels != labels) & (pred_labels != 0) & (labels == 0))
+                (
+                    (pred_labels != labels)
+                    & (pred_labels != zero_tensor)
+                    & (labels == zero_tensor)
+                )
                 .sum()
                 .item()
             )
