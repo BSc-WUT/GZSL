@@ -29,7 +29,6 @@ class MLP(GenericModel):
         return x
 
 
-"""
 def evaluate_model(
     device, model: MLP, data_loader: data.DataLoader, labels_vectors: torch.Tensor
 ):
@@ -45,25 +44,25 @@ def evaluate_model(
         for inputs, labels in data_loader:
             inputs = inputs.to(device)
             labels = labels.to(device)
-            
-            true_predictions += int(pred_label == labels[0])
-            # label = 0 - Benign
+
+            preds = model(inputs)
+            pred_labels = torch.sigmoid(preds)
+
+            true_predictions += int(sum(pred_labels == labels))
             false_positive += int(
-                pred_label != labels[0] and (pred_label == 0 and labels[0] != 0)
+                sum(pred_labels != labels and (pred_labels == 0 and labels != 0))
             )
             false_negative += int(
-                pred_label != labels[0] and (pred_label != 0 and labels[0] == 0)
+                sum(pred_labels != labels and (pred_labels != 0 and labels == 0))
             )
-            predicitons_amount += 1
+            predicitons_amount += len(pred_labels)
 
-        accuracy = accuracy(true_predictions, predicitons_amount)
-        precision = precision(true_predictions, false_positive)
-        sensitivity = sensitivity(true_predictions, false_negative)
-        f1 = f1(precision, sensitivity)
+        acc = accuracy(true_predictions, predicitons_amount)
+        prec = precision(true_predictions, false_positive)
+        sens = sensitivity(true_predictions, false_negative)
+        f1_value = f1(precision, sensitivity)
 
-
-    print(f"Accuracy: {accuracy:4.2f}%")
-    print(f"Precision: {precision:4.2f}")
-    print(f"Sensitivity: {sensitivity:4.2f}")
-    print(f"F1: {f1:4.2f}")
-    """
+    print(f"Accuracy: {acc:4.2f}%")
+    print(f"Precision: {prec:4.2f}")
+    print(f"Sensitivity: {sens:4.2f}")
+    print(f"F1: {f1_value:4.2f}")
