@@ -32,9 +32,9 @@ class GenericModel(nn.Module):
                 labels = labels.to(self.device)
                 inputs = inputs.to(self.device)
 
-                outputs = self(inputs).squeeze()
-                loss = loss_fn(outputs, labels)
-                loss.backward()
+                outputs = self(inputs)
+                loss = loss_fn(outputs, labels.float())
+                loss.backward(retain_graph=True)
                 self.optim.step()
                 self.optim.zero_grad()
 
