@@ -28,8 +28,19 @@ def evaluate_model(
         0.0,
     )
 
+    total_steps = len(data_loader)
+
     with torch.no_grad():
-        for inputs, labels in data_loader:
+        for step, (inputs, labels) in enumerate(data_loader):
+            # Progress Bar
+            progress = (step + 1) / total_steps
+            progress = (step + 1) / total_steps
+            progress_bar = (
+                "[" + "=" * int(50 * progress) + " " * (50 - int(50 * progress)) + "]"
+            )
+            print(
+                f"\r{progress_bar} {step + 1}/{total_steps} batches processed", end=""
+            )
             inputs = inputs.to(device)
             labels = labels.to(device)
             labels_vectors = labels_vectors.to(device)
