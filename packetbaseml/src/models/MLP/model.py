@@ -4,7 +4,6 @@ import torch.nn.functional as F
 import torch.utils.data as data
 
 from src.models.generic import GenericModel
-from src.models.MLP.model import MLP
 from src.models.operations import accuracy, sensitivity, precision, f1
 
 
