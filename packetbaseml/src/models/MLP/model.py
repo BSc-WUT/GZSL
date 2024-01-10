@@ -43,8 +43,7 @@ def evaluate_model(device, model: MLP, data_loader: data.DataLoader):
             labels = labels.to(device)
 
             preds = model(inputs)
-            pred_labels = torch.sigmoid(preds)
-            pred_labels = pred_labels.to(device)
+            pred_labels = preds.to(device)
 
             true_predictions += (pred_labels == labels).sum().item()
             false_positive += (
