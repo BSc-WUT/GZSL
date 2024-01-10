@@ -34,7 +34,7 @@ class GenericModel(nn.Module):
 
                 outputs = self(inputs)
                 loss = loss_fn(outputs, labels)
-                loss.backward(retain_graph=True)
+                loss.backward()
                 self.optim.step()
                 self.optim.zero_grad()
 
