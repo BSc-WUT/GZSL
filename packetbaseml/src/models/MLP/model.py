@@ -48,6 +48,8 @@ def evaluate_model(
             preds = model(inputs)
             pred_labels = torch.sigmoid(preds)
             pred_labels = pred_labels.to(device)
+            print(f"Device of pred_labels: {pred_labels.device}")
+            print(f"Device of labels: {labels.device}")
 
             true_predictions += (pred_labels == labels).sum().item()
             false_positive += (
