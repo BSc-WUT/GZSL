@@ -37,6 +37,7 @@ def evaluate_model(
             labels_vectors = labels_vectors.to(device)
 
             pred_inputs = model(inputs)
+            pred_inputs = pred_inputs.to(device)
             pred_labels = [
                 find_closest_vector(vector=pred_input, labels_vectors=labels_vectors)
                 for pred_input in pred_inputs
