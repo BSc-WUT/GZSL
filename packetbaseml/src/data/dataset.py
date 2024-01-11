@@ -5,7 +5,11 @@ import torch.utils.data as tdata
 
 from src.vars import INTERIM_DATA_PATH, MERGED_DATA_FILENAME, COLUMNS_TO_DROP
 from src.data.labels import labels, test_labels, train_labels
-from src.data.parse_dataset import load_csv_to_dataframe, dataframe_to_dataloader, save_dataframe_to_csv
+from src.data.parse_dataset import (
+    load_csv_to_dataframe,
+    dataframe_to_dataloader,
+    save_dataframe_to_csv,
+)
 
 
 class DatasetIDS2018(tdata.Dataset):
@@ -48,10 +52,19 @@ class DatasetIDS2018(tdata.Dataset):
         labels_idx: dict = {label: i for i, label in enumerate(labels)}
         self.data["Label"] = self.data["Label"].map(labels_idx)
 
+    def reduce_benign_class(self) -> None:
+        benign_class_df: pd.DataFrame = self.data[self.data["Label"] == 0]
+        other_classes_df: pd.DataFrame = self.data[self.data["Label"] != 0]
+        reduced_benign_class_df: pd.DataFrame = benign_class_df.sample(
+            frac=0.08, random_state=42
+        )
+        self.data = pd.concat([reduced_benign_class_df, other_classes_df])
+
     def fix_dataset(self) -> None:
         self.drop_columns(COLUMNS_TO_DROP)
         self.map_labels_to_idx()
         self.fix_data_type_to_numeric()
+        self.reduce_benign_class()
         self.is_fixed = True
 
     def load_dataloader(
