@@ -17,14 +17,6 @@ def load_model(model_name: str) -> GenericModel:
     return model
 
 
-"""
-
-        
-        
-        f1 = 2 * precision * sensitivity / (precision + sensitivity)
-"""
-
-
 def precision(true_predictions: int, false_positive: int) -> float:
     try:
         precision: float = (
