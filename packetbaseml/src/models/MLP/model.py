@@ -16,14 +16,19 @@ class MLP(GenericModel):
     ):
         super().__init__(device)
         self.linear1 = nn.Linear(input_dim, 512)
+        self.bn1 = nn.BatchNorm1d(512)
         self.linear2 = nn.Linear(512, 256)
-        self.linear3 = nn.Linear(256, output_dim)
+        self.bn2 = nn.BatchNorm1d(256)
+        self.linear3 = nn.Linear(256, 32)
+        self.bn2 = nn.BatchNorm1d(32)
+        self.linear4 = nn.Linear(32, output_dim)
         self.ReLU = nn.LeakyReLU()
 
     def forward(self, x):
-        x = self.ReLU(self.linear1(x))
-        x = self.ReLU(self.linear2(x))
-        x = self.linear3(x)
+        x = self.ReLU(self.bn1(self.linear1(x)))
+        x = self.ReLU(self.bn2(self.linear2(x)))
+        x = self.ReLU(self.bn3(self.linear3(x)))
+        x = self.linear4(x)
         x = F.softmax(x, dim=1)
         return x
 
