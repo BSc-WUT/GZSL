@@ -60,6 +60,9 @@ def evaluate_model(device, model: MLP, data_loader: data.DataLoader):
 
             preds = model(inputs)
             pred_labels = preds.to(device)
+            pred_labels = torch.argmax(
+                pred_labels, dim=1
+            )  # Get the label with maximum probability
 
             true_predictions += (pred_labels == labels).sum().item()
             false_positive += (
