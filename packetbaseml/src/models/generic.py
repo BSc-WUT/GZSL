@@ -33,6 +33,7 @@ class GenericModel(nn.Module):
                 inputs = inputs.to(self.device)
 
                 outputs = self(inputs)
+                outputs = outputs.squeeze()
                 loss = loss_fn(outputs, labels.to(torch.long))
                 loss.backward(retain_graph=True)
                 self.optim.step()

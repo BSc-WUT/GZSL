@@ -19,35 +19,31 @@ def load_model(model_name: str) -> GenericModel:
 
 def precision(true_predictions: int, false_positive: int) -> float:
     try:
-        precision: float = (
-            100.0 * true_predictions / (true_predictions + false_positive)
-        )
+        prec: float = 100.0 * true_predictions / (true_predictions + false_positive)
     except:
-        precision = 0.0
-    return precision
+        prec = 0.0
+    return prec
 
 
 def accuracy(true_predictions: int, predicitons_amount: int) -> float:
     try:
-        accuracy: float = 100.0 * true_predictions / predicitons_amount
+        acc: float = 100.0 * true_predictions / predicitons_amount
     except:
-        accuracy = 0.0
-    return accuracy
+        acc = 0.0
+    return acc
 
 
 def sensitivity(true_predictions: int, false_negative: int) -> float:
     try:
-        sensitivity: float = (
-            100.0 * true_predictions / (true_predictions + false_negative)
-        )
+        sens: float = 100.0 * true_predictions / (true_predictions + false_negative)
     except:
-        sensitivity = 0.0
-    return sensitivity
+        sens = 0.0
+    return sens
 
 
-def f1(precision: float, sensitivity: float) -> float:
+def f1(prec: float, sens: float) -> float:
     try:
-        f1: float = 2 * precision * sensitivity / (precision + sensitivity)
+        f1: float = 2 * prec * sens / (prec + sens)
     except:
         f1 = 0.0
     return f1

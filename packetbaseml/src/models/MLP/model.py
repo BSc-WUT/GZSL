@@ -20,7 +20,7 @@ class MLP(GenericModel):
         self.linear2 = nn.Linear(512, 256)
         self.bn2 = nn.BatchNorm1d(256)
         self.linear3 = nn.Linear(256, 32)
-        self.bn2 = nn.BatchNorm1d(32)
+        self.bn3 = nn.BatchNorm1d(32)
         self.linear4 = nn.Linear(32, output_dim)
         self.ReLU = nn.LeakyReLU()
 

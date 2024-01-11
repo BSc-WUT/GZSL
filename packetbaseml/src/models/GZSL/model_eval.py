@@ -65,11 +65,10 @@ def evaluate_model(
             predicitons_amount += len(pred_labels)
 
         acc = accuracy(true_predictions, predicitons_amount)
+        print(f"\nAccuracy: {acc:4.2f}%")
         prec = precision(true_predictions, false_positive)
+        print(f"Precision: {prec:4.2f}")
         sens = sensitivity(true_predictions, false_negative)
+        print(f"Sensitivity: {sens:4.2f}")
         f1_value = f1(prec, sens)
-
-    print(f"Accuracy: {acc:4.2f}%")
-    print(f"Precision: {prec:4.2f}")
-    print(f"Sensitivity: {sens:4.2f}")
-    print(f"F1: {f1_value:4.2f}")
+        print(f"F1: {f1_value:4.2f}")
