@@ -1,4 +1,4 @@
-labels = [
+cicids2018_labels = [
     "Benign",
     "Bot",
     "Brute Force -XSS",
@@ -17,7 +17,7 @@ labels = [
     "SQL Injection",
 ]
 
-train_labels = [
+cicids2018_train_labels = [
     "Bot",
     "Brute Force -XSS",
     "DDOS attack-HOIC",
@@ -31,4 +31,35 @@ train_labels = [
     "Label",
 ]
 
-test_labels = [label for label in labels if label not in train_labels]
+cicids2018_test_labels = [
+    label for label in cicids2018_labels if label not in cicids2018_train_labels
+]
+
+
+nb15v2_labels = [
+    "Analysis",
+    "Backdoor",
+    "Benign",
+    "DoS",
+    "Exploits",
+    "Fuzzers",
+    "Generic",
+    "Reconnaissance",
+    "Shellcode",
+    "Worms",
+]
+
+nb15v2_train_labels = [
+    "Analysis",
+    "Benign",
+    "DoS",
+    "Exploits",
+    "Generic",
+    "Reconnaissance",
+    "Shellcode",
+    "Worms",
+]
+
+nb15v2_test_labels = [
+    label for label in nb15v2_labels if label not in nb15v2_train_labels
+]

@@ -19,6 +19,7 @@ data_backup
 src/test
 results.json
 *.png
+*.csv
 
 # C extensions
 *.so
