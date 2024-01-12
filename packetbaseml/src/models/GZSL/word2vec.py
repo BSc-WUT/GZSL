@@ -1,9 +1,8 @@
 import string
 from gensim.models.word2vec import Word2Vec
-from src.data.labels import labels
 
 
-def create_gensim_model(word_vector_size: int) -> Word2Vec:
+def create_gensim_model(word_vector_size: int, labels: list) -> Word2Vec:
     corpus = []
     for label in labels:
         words = [
@@ -17,9 +16,9 @@ def create_gensim_model(word_vector_size: int) -> Word2Vec:
 
 
 class LabelsEmbeddings:
-    def __init__(self, word_vector_size: int):
+    def __init__(self, word_vector_size: int, labels: list):
         self.word_vector_size: int = word_vector_size
-        self.model: Word2Vec = create_gensim_model(word_vector_size)
+        self.model: Word2Vec = create_gensim_model(word_vector_size, labels)
 
     def fix_vectors_sizes(self, vectors: list) -> list:
         fixed_vectors = []
