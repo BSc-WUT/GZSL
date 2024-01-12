@@ -20,6 +20,7 @@ class GenericModel(nn.Module):
         loss_fn,
         data_loader: data,
         additional_eps=1e-06,
+        squeeze: bool = True,
     ) -> None:
         self.train()
         for epoch in range(epochs):
@@ -33,7 +34,8 @@ class GenericModel(nn.Module):
                 inputs = inputs.to(self.device)
 
                 outputs = self(inputs)
-                outputs = outputs.squeeze()
+                if squeeze:
+                    outputs = outputs.squeeze()
                 loss = loss_fn(outputs, labels.to(torch.long))
                 loss.backward(retain_graph=True)
                 self.optim.step()
